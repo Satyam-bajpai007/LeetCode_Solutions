@@ -1,24 +1,22 @@
 class Solution:
     def canReach(self, arr: List[int], start: int) -> bool:
-        n=len(arr)
-        visited=set()
+        queue = deque()
+        queue.append(start)
+        visited = set()
+        n = len(arr)
         
-        def helper(start,visited):
+        while queue:
+            idx = queue.popleft()
             
-            if start<0 or start>n-1:
-                return False
+            if idx in visited:
+                continue
+            visited.add(idx)
             
-            if start in visited:
-                return False  
-            
-            if arr[start] == 0:
+            if arr[idx] == 0:
                 return True
-            
-            visited.add(start)
-            
-            high = helper(start + arr[start],visited)
-            low = helper(start - arr[start],visited)
-            
-            return high or low
-        
-        return helper(start,visited)
+            else:
+                if idx - arr[idx] >= 0:
+                    queue.append(idx - arr[idx])
+                if idx + arr[idx] < n:
+                    queue.append(idx + arr[idx])
+        return False
